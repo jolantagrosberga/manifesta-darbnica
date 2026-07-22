@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manifesta darbnīca — modernisms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1ECDE;--paper-2:#E9E2CF;--ink:#141210;--ink-soft:#4B463C;
+    --red:#CC2A1E;--red-dark:#A21F16;--line:#141210;--muted:#8A8371;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:"Work Sans",system-ui,sans-serif;color:var(--ink);
+    background:#17150F;min-height:100vh;padding:28px 16px;
+    display:flex;align-items:flex-start;justify-content:center;
+  }
+  .stage{width:100%;max-width:760px}
+  .sheet{
+    background:
+      repeating-linear-gradient(0deg, rgba(20,18,16,.028) 0 3px, rgba(0,0,0,0) 3px 6px),
+      linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 100%);
+    border:2px solid var(--ink);box-shadow:0 30px 70px -26px rgba(0,0,0,.8);
+    position:relative;overflow:hidden;
+  }
+  .masthead{border-bottom:3px double var(--ink);padding:22px 30px 16px;position:relative}
+  .kicker{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.28em;font-size:12px;color:var(--red);margin:0 0 4px}
+  .masthead h1{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(28px,7vw,48px);line-height:1.28;padding-top:6px;padding-bottom:2px;letter-spacing:.005em;margin:0;color:var(--ink)}
+  .masthead .tag{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;color:var(--ink-soft);margin-top:8px}
+
+  .inner{padding:26px 30px 30px}
+
+  .steps{display:flex;gap:6px;margin-bottom:22px}
+  .steps .st{flex:1;height:6px;background:rgba(20,18,16,.16)}
+  .steps .st.done{background:var(--ink)}
+  .steps .st.now{background:var(--red)}
+
+  .stepnum{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:var(--red);margin:0 0 6px}
+  .q{font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(22px,5vw,30px);line-height:1.3;padding-top:4px;margin:0 0 6px}
+  .hint{font-size:15px;color:var(--ink-soft);line-height:1.5;margin:0 0 18px;max-width:56ch}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px}
+  .chip{font-family:"Work Sans",sans-serif;font-size:15px;color:var(--ink);background:transparent;border:1.6px solid var(--ink);border-radius:2px;padding:9px 14px;cursor:pointer;line-height:1.2;text-align:left;transition:background .12s,color .12s,transform .1s}
+  .chip:hover{transform:translateY(-1px)}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .chip.tone[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+
+  label.fl{display:block;font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--ink-soft);margin:14px 0 6px}
+  input.tin,textarea.tin{width:100%;font-family:"Work Sans",sans-serif;font-size:16px;color:var(--ink);background:rgba(255,255,255,.5);border:1.6px solid var(--ink);border-radius:2px;padding:12px 14px;resize:vertical}
+  input.tin::placeholder,textarea.tin::placeholder{color:var(--muted)}
+  input.big{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(20px,4.4vw,26px);letter-spacing:.01em;padding:14px}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+  .btn{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:14px;color:var(--paper);background:var(--ink);border:2px solid var(--ink);border-radius:2px;padding:12px 22px;cursor:pointer;transition:transform .1s,background .12s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.red{background:var(--red);border-color:var(--red)}
+  .btn.red:hover{background:var(--red-dark);border-color:var(--red-dark)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:rgba(20,18,16,.06)}
+  .btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+  /* Manifests */
+  .poster{position:relative}
+  .p-head{background:var(--red);padding:34px 30px 34px;clip-path:polygon(0 0,100% 0,100% calc(100% - 16px),0 100%)}
+  .p-body{padding:26px 30px 30px}
+  .p-kicker{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.3em;font-size:12px;color:var(--paper);margin:0 0 14px}
+  .p-title{font-family:"Anton",sans-serif;text-transform:uppercase;color:var(--paper);font-size:clamp(34px,9vw,64px);line-height:1.26;padding-top:8px;margin:0 0 10px;word-break:break-word}
+  .p-sub{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:13px;color:var(--paper);opacity:.92;margin:0}
+
+  .p-preamble{font-family:"Oswald",sans-serif;font-weight:500;font-size:clamp(17px,3.4vw,20px);line-height:1.35;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);border-left:5px solid var(--red);padding-left:14px;margin:0 0 22px}
+  ol.decl{list-style:none;counter-reset:d;margin:0 0 22px;padding:0}
+  ol.decl li{counter-increment:d;position:relative;padding-left:52px;margin-bottom:16px;font-size:17.5px;line-height:1.5}
+  ol.decl li::before{content:counter(d,decimal);position:absolute;left:0;top:-2px;font-family:"Anton",sans-serif;font-size:30px;color:var(--red);line-height:1}
+  .blank{border-bottom:2px dashed var(--red);color:var(--ink);cursor:text;padding:0 3px;min-width:40px;display:inline-block}
+  .blank:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
+  .p-slogan{font-family:"Anton",sans-serif;text-transform:uppercase;color:var(--red);font-size:clamp(24px,6.2vw,40px);line-height:1.3;margin:20px 0 6px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:20px 0 16px;word-break:break-word}
+  .p-sign{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--ink-soft);margin-top:14px}
+
+  .editnote{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted);margin:2px 30px 0}
+  .result-actions{display:flex;flex-wrap:wrap;gap:10px;padding:18px 30px 4px}
+
+  /* Gleznošanas darbnīca */
+  .guide{border:2px solid var(--ink);background:rgba(255,255,255,.45);padding:14px 16px;margin-bottom:20px}
+  .guide .g-title{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(18px,4vw,24px);line-height:1.28;padding-top:3px;color:var(--ink)}
+  .guide .g-title span{color:var(--red)}
+  .guide .g-slogan{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--red);font-size:14px;margin-top:4px}
+  .guide .g-decl{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:1.45}
+  .guide .g-decl li{margin-bottom:2px}
+
+  .studio-grid{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:start}
+  @media(max-width:620px){.studio-grid{grid-template-columns:1fr}}
+  .tgroup{margin-bottom:16px}
+  .tlabel{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--ink-soft);margin:0 0 7px}
+  .seg{display:flex;flex-direction:column;gap:6px}
+  @media(max-width:620px){.seg{flex-direction:row;flex-wrap:wrap}}
+  .segbtn{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:13px;color:var(--ink);background:transparent;border:1.6px solid var(--ink);border-radius:2px;padding:9px 12px;cursor:pointer;transition:background .12s,color .12s}
+  .segbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}
+  .sw{aspect-ratio:1;border:2px solid var(--ink);border-radius:2px;cursor:pointer;padding:0}
+  .sw[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:1px}
+  .ccolor{width:100%;height:34px;border:1.6px solid var(--ink);background:transparent;padding:2px;cursor:pointer}
+  input[type=range]{width:100%}
+  .tgroup.btns{display:flex;gap:8px}
+  .tgroup.btns .btn{flex:1;padding:10px 8px;font-size:13px}
+
+  .canvas-wrap{background:#D9D5CA;border:2px solid var(--ink);padding:18px;display:flex;align-items:center;justify-content:center;min-height:220px}
+  #cv{touch-action:none;background:#fff;border:1px solid #BDB8AA;box-shadow:0 6px 16px -6px rgba(0,0,0,.35);max-width:100%;cursor:crosshair}
+  #cv.round{border-radius:50%}
+  .studio-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .clearnote{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;color:var(--muted);margin-top:8px}
+
+  .footer{margin-top:18px;text-align:center;font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#6f6a5a}
+
+  .hidden{display:none !important}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  :focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .stage{max-width:100%}
+    .no-print{display:none !important}
+    .sheet{border:none;box-shadow:none}
+    .p-head{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="sheet">
+      <!-- DARBNĪCA -->
+      <div id="workshop">
+        <div class="masthead">
+          <p class="kicker">Modernisma māksla · 9. klase</p>
+          <h1>Manifesta darbnīca</h1>
+          <p class="tag">Uzraksti savas mākslas kustības manifestu — sešos soļos</p>
+        </div>
+        <div class="inner">
+          <div class="steps" id="stepsBar"></div>
+          <div id="stepBox"></div>
+          <div class="nav">
+            <button class="btn ghost" id="backBtn">← Atpakaļ</button>
+            <button class="btn red" id="nextBtn">Tālāk →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANIFESTS -->
+      <div id="result" class="hidden">
+        <div class="poster" id="poster">
+          <div class="p-head">
+            <p class="p-kicker">Modernisma manifests</p>
+            <h2 class="p-title" id="pTitle">KUSTĪBA</h2>
+            <p class="p-sub" id="pSub">Manifests</p>
+          </div>
+          <div class="p-body">
+            <p class="p-preamble" id="pPre"></p>
+            <ol class="decl" id="pDecl"></ol>
+            <div class="p-slogan" id="pSlogan"></div>
+            <p class="p-sign" id="pSign"></p>
+          </div>
+        </div>
+        <p class="editnote no-print">Sarkani svītrotās vietas jāaizpilda pašam — klikšķini un raksti. Saukli un ievadu arī vari rediģēt.</p>
+        <div class="result-actions no-print">
+          <button class="btn red" id="createArtBtn">Radīt gleznu →</button>
+          <button class="btn ghost" id="restartBtn">Sākt no jauna</button>
+        </div>
+      </div>
+
+      <!-- GLEZNOŠANAS DARBNĪCA -->
+      <div id="studio" class="hidden">
+        <div class="masthead">
+          <p class="kicker">Gleznošanas darbnīca</p>
+          <h1>Radi savu gleznu</h1>
+          <p class="tag">Glezno pēc sava manifesta — izvēlies tehniku un audeklu</p>
+        </div>
+        <div class="inner">
+          <div class="guide" id="guide"></div>
+          <div class="studio-grid">
+            <div class="tools">
+              <div class="tgroup">
+                <p class="tlabel">Tehnika</p>
+                <div class="seg" id="techSeg">
+                  <button class="segbtn" type="button" data-tech="akvarelis">Akvarelis</button>
+                  <button class="segbtn" type="button" data-tech="pastelis">Pastelis</button>
+                  <button class="segbtn" type="button" data-tech="ella">Eļļa</button>
+                </div>
+              </div>
+              <div class="tgroup">
+                <p class="tlabel">Rīks</p>
+                <div class="seg" id="toolSeg">
+                  <button class="segbtn" type="button" data-tool="brush">Ota</button>
+                  <button class="segbtn" type="button" data-tool="eraser">Dzēšgumija</button>
+                </div>
+              </div>
+              <div class="tgroup">
+                <p class="tlabel">Audekls</p>
+                <div class="seg" id="shapeSeg">
+                  <button class="segbtn" type="button" data-shape="h">Horizontāls</button>
+                  <button class="segbtn" type="button" data-shape="v">Vertikāls</button>
+                  <button class="segbtn" type="button" data-shape="r">Apaļš</button>
+                </div>
+                <p class="clearnote">Audekla maiņa notīra gleznu.</p>
+              </div>
+              <div class="tgroup">
+                <p class="tlabel">Krāsa</p>
+                <div class="swatches" id="swatches"></div>
+                <input type="color" id="customColor" value="#cc2a1e" class="ccolor" title="Sava krāsa">
+              </div>
+              <div class="tgroup">
+                <p class="tlabel">Otas izmērs</p>
+                <input type="range" id="brush" min="4" max="48" value="18">
+              </div>
+              <div class="tgroup btns">
+                <button class="btn ghost" type="button" id="undoBtn">Atsaukt</button>
+                <button class="btn ghost" type="button" id="clearBtn">Notīrīt</button>
+              </div>
+            </div>
+            <div class="canvas-wrap" id="canvasWrap">
+              <canvas id="cv"></canvas>
+            </div>
+          </div>
+          <div class="studio-actions">
+            <button class="btn red" type="button" id="saveArtBtn">Saglabāt gleznu</button>
+            <button class="btn ghost" type="button" id="backToManifestBtn">← Manifests</button>
+            <button class="btn ghost" type="button" id="restart2Btn">Sākt no jauna</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="footer">Manifesta darbnīca · VisaSkola.lv</p>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var el=function(id){return document.getElementById(id);};
+  var YEAR=new Date().getFullYear();
+
+  /* ---------- DARBNĪCA (manifests) ---------- */
+  var STEPS=[
+    { key:"name", kind:"start", q:"Kā sauc tavu kustību?",
+      hint:"Izdomā nosaukumu savai mākslas kustībai. Modernisma virzienu nosaukumi bieži beidzas ar «-isms» — piemēram, kubisms vai futūrisms. Atļaujies izdomāt savu." },
+    { key:"reject", kind:"chips", q:"Pret ko tu sacelies?",
+      hint:"Modernisms izaicināja un noliedza vecās tradīcijas. Izvēlies, ko noraidi, vai pieraksti savu.",
+      options:["aklu pagātnes atkārtošanu","reālisma un naturālisma važas","perfektu, nedzīvu kopēšanu","pelēku ikdienas garlaicību","noteikumus, kas žņaudz brīvību","bailes būt savādākam"] },
+    { key:"believe", kind:"chips", q:"Ko tu sludini?",
+      hint:"Katram virzienam ir savas vērtības. Izvēlies, kam TU tici savā mākslā.",
+      options:["kustībai, ātrumam un dinamikai","spilgtām, brīvām krāsām","drosmīgiem formas eksperimentiem","patiesām, dziļām emocijām","sapņiem un zemapziņai","gaismai un vienam neatkārtojamam mirklim","mākslinieka individualitātei"] },
+    { key:"means", kind:"chips", q:"Ar ko tu to izteiksi?",
+      hint:"Mākslinieciskie izteiksmes līdzekļi ir tavi darbarīki. Izvēlies galvenos.",
+      options:["krāsa","līnija","forma","kompozīcija","kontrasts","faktūra","ritms","gaisma un ēna"] },
+    { key:"tone", kind:"single", q:"Kāda ir manifesta noskaņa?",
+      hint:"Tonis nosaka, kā manifests skan. Izvēlies vienu.",
+      options:["Dumpīgs","Drosmīgs","Sapņains","Dedzīgs","Mierīgi pārliecināts"] },
+    { key:"slogan", kind:"slogan", q:"Tavs kaujas sauklis",
+      hint:"Viena spēcīga, īsa rinda, ko cilvēki atcerēsies. Piemēram: «Krāsa ir brīvība!»" }
+  ];
+  var TONE_PRE={
+    "Dumpīgs":"Vecā māksla ir mirusi. Mēs sākam visu no jauna.",
+    "Drosmīgs":"Mēs nebaidāmies un sakām to skaļi.",
+    "Sapņains":"Mēs sekojam sapņiem tālāk par redzamo.",
+    "Dedzīgs":"Mūsu domas deg — māksla nevar gaidīt.",
+    "Mierīgi pārliecināts":"Mēs zinām, ko darām, un darīsim to līdz galam."
+  };
+  function newState(){return { name:"", team:"", reject:new Set(), rejectText:"", believe:new Set(), believeText:"", means:new Set(), meansText:"", tone:"", slogan:"" };}
+  var state=newState(), cur=0;
+  var stepBox=el("stepBox"), backBtn=el("backBtn"), nextBtn=el("nextBtn");
+
+  function buildBar(){var bar=el("stepsBar");bar.innerHTML="";for(var i=0;i<STEPS.length;i++){var s=document.createElement("span");s.className="st"+(i<cur?" done":(i===cur?" now":""));bar.appendChild(s);}}
+  function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+  function render(){
+    var st=STEPS[cur]; buildBar();
+    var h='<p class="stepnum">Solis '+(cur+1)+' / '+STEPS.length+'</p><h2 class="q">'+st.q+'</h2><p class="hint">'+st.hint+'</p>';
+    if(st.kind==="start"){
+      h+='<label class="fl" for="f_name">Kustības nosaukums</label><input class="tin big" id="f_name" maxlength="40" placeholder="piem., DZIRKSTELISMS" value="'+esc(state.name)+'">';
+      h+='<label class="fl" for="f_team">Komandas nosaukums</label><input class="tin" id="f_team" maxlength="60" placeholder="piem., Krāsu brigāde" value="'+esc(state.team)+'">';
+    } else if(st.kind==="chips"){
+      h+='<div class="chips" id="chips"></div><label class="fl" for="f_text">Pievieno savu (nav obligāti)</label><input class="tin" id="f_text" maxlength="80" placeholder="tava doma...">';
+    } else if(st.kind==="single"){ h+='<div class="chips" id="chips"></div>';
+    } else if(st.kind==="slogan"){ h+='<label class="fl" for="f_slogan">Sauklis</label><input class="tin big" id="f_slogan" maxlength="60" placeholder="KRĀSA IR BRĪVĪBA!" value="'+esc(state.slogan)+'">'; }
+    stepBox.innerHTML=h;
+
+    if(st.kind==="chips"){
+      var box=el("chips"), sel=state[st.key];
+      st.options.forEach(function(op){
+        var b=document.createElement("button");b.className="chip";b.type="button";
+        b.setAttribute("aria-pressed", sel.has(op)?"true":"false");b.textContent=op;
+        b.addEventListener("click",function(){ if(sel.has(op))sel.delete(op);else sel.add(op); b.setAttribute("aria-pressed",sel.has(op)?"true":"false"); });
+        box.appendChild(b);
+      });
+      el("f_text").value=state[st.key+"Text"]||"";
+    }
+    if(st.kind==="single"){
+      var box2=el("chips");
+      st.options.forEach(function(op){
+        var b=document.createElement("button");b.className="chip tone";b.type="button";
+        b.setAttribute("aria-pressed", state.tone===op?"true":"false");b.textContent=op;
+        b.addEventListener("click",function(){ state.tone=op; Array.prototype.forEach.call(box2.children,function(c){c.setAttribute("aria-pressed",c.textContent===op?"true":"false");}); });
+        box2.appendChild(b);
+      });
+    }
+    backBtn.style.visibility = cur===0 ? "hidden" : "visible";
+    nextBtn.textContent = cur===STEPS.length-1 ? "Izveidot manifestu →" : "Tālāk →";
+  }
+  function save(){
+    var st=STEPS[cur];
+    if(st.kind==="start"){ state.name=el("f_name").value.trim(); state.team=el("f_team").value.trim(); }
+    else if(st.kind==="chips"){ state[st.key+"Text"]=el("f_text").value.trim(); }
+    else if(st.kind==="slogan"){ state.slogan=el("f_slogan").value.trim(); }
+  }
+  function joinLv(arr){arr=arr.filter(Boolean);if(!arr.length)return "";if(arr.length===1)return arr[0];return arr.slice(0,-1).join(", ")+" un "+arr[arr.length-1];}
+  function listFor(key){var arr=Array.from(state[key]);var t=state[key+"Text"];if(t)arr.push(t);return joinLv(arr);}
+
+  function buildManifesto(){
+    el("pTitle").textContent=(state.name||"Jaunā kustība").toUpperCase();
+    el("pSub").textContent="Manifests";
+    el("pPre").textContent=TONE_PRE[state.tone]||"Mēs esam nolēmuši radīt no jauna.";
+    var rej=listFor("reject"), bel=listFor("believe"), mns=listFor("means");
+    var decl=el("pDecl"); decl.innerHTML="";
+    function li(html){var e=document.createElement("li");e.innerHTML=html;decl.appendChild(e);}
+    li("Mēs noliedzam "+(rej||'<span class="blank" contenteditable="true" data-ph="(ko tu noraidi?)"></span>')+' — jo <span class="blank" contenteditable="true" data-ph="(pabeidz domu saviem vārdiem)"></span>');
+    li("Mēs ticam "+(bel||'<span class="blank" contenteditable="true" data-ph="(kam tu tici?)"></span>')+".");
+    li("Mūsu izteiksmes līdzekļi ir "+(mns||'<span class="blank" contenteditable="true" data-ph="(ar ko tu strādā?)"></span>')+".");
+    li('Mēs solām, ka <span class="blank" contenteditable="true" data-ph="(uzraksti savu solījumu māksliniecībai)"></span>');
+    el("pSlogan").textContent=(state.slogan||"Uzraksti savu saukli!").toUpperCase();
+    el("pSign").textContent="— "+(state.team||"Komanda")+" · "+YEAR;
+    var pk=document.querySelector(".p-kicker"); if(pk) pk.textContent="Modernisma manifests · "+YEAR;
+    // rediģējami: ievads un sauklis (tukšās vietas — atsevišķi contenteditable)
+    el("pPre").setAttribute("contenteditable","true");
+    el("pSlogan").setAttribute("contenteditable","true");
+  }
+  function showResult(){ save(); buildManifesto(); el("workshop").classList.add("hidden"); el("studio").classList.add("hidden"); el("result").classList.remove("hidden"); window.scrollTo(0,0); }
+
+  nextBtn.addEventListener("click",function(){ save(); if(cur<STEPS.length-1){cur++;render();window.scrollTo(0,0);} else showResult(); });
+  backBtn.addEventListener("click",function(){ save(); if(cur>0){cur--;render();window.scrollTo(0,0);} });
+  el("restartBtn").addEventListener("click",function(){ state=newState(); cur=0; el("result").classList.add("hidden"); el("workshop").classList.remove("hidden"); render(); window.scrollTo(0,0); });
+
+  /* ---------- GLEZNOŠANAS DARBNĪCA ---------- */
+  var cv=el("cv"), ctx=cv.getContext("2d");
+  var PALETTE=["#CC2A1E","#E8622A","#F2B233","#3FA34D","#1F9E8F","#2C6FB0","#7A4FB0","#D14D8B","#EDE6D6","#141210"];
+  var tech="akvarelis", shape="h", color="#CC2A1E", brush=18, eraser=false;
+  var painting=false, last=null, history=[];
+
+  var SHAPES={ h:{w:760,h:500,round:false}, v:{w:520,h:720,round:false}, r:{w:620,h:620,round:true} };
+
+  function hexToRgb(hex){hex=hex.replace("#","");if(hex.length===3)hex=hex.split("").map(function(c){return c+c;}).join("");var n=parseInt(hex,16);return [(n>>16)&255,(n>>8)&255,n&255];}
+
+  function fitDisplay(){
+    var wrap=el("canvasWrap"); var cw=wrap.clientWidth-28; if(cw<180)cw=180;
+    var maxH=460; var sc=Math.min(cw/cv.width, maxH/cv.height);
+    cv.style.width=(cv.width*sc)+"px"; cv.style.height=(cv.height*sc)+"px";
+  }
+  function initCanvas(){
+    var s=SHAPES[shape]; cv.width=s.w; cv.height=s.h;
+    cv.classList.toggle("round", s.round);
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,cv.width,cv.height);
+    if(s.round){ ctx.save(); ctx.beginPath(); ctx.arc(cv.width/2,cv.height/2,cv.width/2,0,Math.PI*2); ctx.clip(); }
+    ctx.fillStyle="#ffffff";
+    if(s.round){ ctx.beginPath(); ctx.arc(cv.width/2,cv.height/2,cv.width/2,0,Math.PI*2); ctx.fill(); }
+    else ctx.fillRect(0,0,cv.width,cv.height);
+    history=[]; fitDisplay();
+  }
+  function snapshot(){ try{ history.push(ctx.getImageData(0,0,cv.width,cv.height)); if(history.length>8)history.shift(); }catch(e){} }
+  function undo(){ if(history.length){ ctx.putImageData(history.pop(),0,0); } }
+
+  function pos(e){ var r=cv.getBoundingClientRect(); return { x:(e.clientX-r.left)*(cv.width/r.width), y:(e.clientY-r.top)*(cv.height/r.height) }; }
+
+  function dab(x,y){
+    if(eraser){ ctx.globalCompositeOperation="source-over"; ctx.globalAlpha=1; ctx.fillStyle="#ffffff"; ctx.beginPath(); ctx.arc(x,y,brush,0,Math.PI*2); ctx.fill(); return; }
+    var rgb=hexToRgb(color), r=brush;
+    if(tech==="akvarelis"){
+      ctx.globalCompositeOperation="multiply";
+      var rad=r*1.7, g=ctx.createRadialGradient(x,y,0,x,y,rad);
+      g.addColorStop(0,"rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+",0.10)");
+      g.addColorStop(1,"rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+",0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.fill();
+      ctx.globalCompositeOperation="source-over";
+    } else if(tech==="pastelis"){
+      ctx.globalCompositeOperation="source-over";
+      var n=Math.max(6,Math.floor(r*1.4));
+      for(var i=0;i<n;i++){ var a=Math.random()*Math.PI*2, dd=Math.random()*r; var px=x+Math.cos(a)*dd, py=y+Math.sin(a)*dd; ctx.fillStyle="rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+","+(0.35+Math.random()*0.3).toFixed(2)+")"; var s=Math.random()*1.6+0.6; ctx.fillRect(px,py,s,s); }
+    } else { // eļļa
+      ctx.globalCompositeOperation="source-over"; ctx.globalAlpha=0.98;
+      ctx.fillStyle="rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      // faktūra: pāris gaišāku/tumšāku svītru
+      for(var k=0;k<2;k++){ var f=k?1.14:0.82; ctx.strokeStyle="rgba("+Math.min(255,rgb[0]*f|0)+","+Math.min(255,rgb[1]*f|0)+","+Math.min(255,rgb[2]*f|0)+",0.5)"; ctx.lineWidth=Math.max(1,r*0.18); ctx.beginPath(); var ang=Math.random()*Math.PI; ctx.moveTo(x-Math.cos(ang)*r*0.7,y-Math.sin(ang)*r*0.7); ctx.lineTo(x+Math.cos(ang)*r*0.7,y+Math.sin(ang)*r*0.7); ctx.stroke(); }
+      ctx.globalAlpha=1;
+    }
+  }
+  function stroke(x0,y0,x1,y1){
+    var dx=x1-x0, dy=y1-y0, dist=Math.sqrt(dx*dx+dy*dy);
+    var sp=Math.max(1, brush*(tech==="akvarelis"?0.35:0.22));
+    var steps=Math.max(1,Math.floor(dist/sp));
+    for(var i=0;i<=steps;i++){ var t=i/steps; dab(x0+dx*t,y0+dy*t); }
+  }
+
+  cv.addEventListener("pointerdown",function(e){ e.preventDefault(); snapshot(); painting=true; last=pos(e); dab(last.x,last.y); cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove",function(e){ if(!painting)return; var p=pos(e); stroke(last.x,last.y,p.x,p.y); last=p; });
+  function endStroke(){ painting=false; last=null; }
+  cv.addEventListener("pointerup",endStroke);
+  cv.addEventListener("pointercancel",endStroke);
+  cv.addEventListener("pointerleave",function(){ if(painting) endStroke(); });
+
+  function buildSwatches(){
+    var box=el("swatches"); box.innerHTML="";
+    PALETTE.forEach(function(c){
+      var b=document.createElement("button"); b.className="sw"; b.type="button"; b.style.background=c;
+      b.setAttribute("aria-pressed", c.toLowerCase()===color.toLowerCase()?"true":"false");
+      b.addEventListener("click",function(){ color=c; el("customColor").value=c; eraser=false; setSeg("toolSeg","data-tool","brush"); syncSwatch(); });
+      box.appendChild(b);
+    });
+  }
+  function syncSwatch(){ Array.prototype.forEach.call(el("swatches").children,function(b,i){ b.setAttribute("aria-pressed", PALETTE[i].toLowerCase()===color.toLowerCase()?"true":"false"); }); }
+  function setSeg(segId,attr,val){ Array.prototype.forEach.call(el(segId).children,function(b){ b.setAttribute("aria-pressed", b.getAttribute(attr)===val?"true":"false"); }); }
+
+  function buildGuide(){
+    var name=el("pTitle").textContent, slogan=el("pSlogan").innerText||el("pSlogan").textContent;
+    var items=el("pDecl").querySelectorAll("li");
+    var h='<div class="g-title">'+esc(name)+' · <span>Manifests</span></div>';
+    h+='<div class="g-slogan">«'+esc(slogan)+'»</div>';
+    h+='<ol class="g-decl">';
+    Array.prototype.forEach.call(items,function(li){ h+='<li>'+esc(li.innerText.trim())+'</li>'; });
+    h+='</ol>';
+    el("guide").innerHTML=h;
+  }
+  function openStudio(){
+    buildGuide();
+    el("result").classList.add("hidden"); el("workshop").classList.add("hidden");
+    el("studio").classList.remove("hidden");
+    tech="akvarelis"; shape="h"; color="#CC2A1E"; brush=18;
+    el("brush").value=18; el("customColor").value="#cc2a1e";
+    eraser=false;
+    buildSwatches(); setSeg("techSeg","data-tech",tech); setSeg("shapeSeg","data-shape",shape); setSeg("toolSeg","data-tool","brush");
+    initCanvas(); window.scrollTo(0,0);
+  }
+
+  el("createArtBtn").addEventListener("click",openStudio);
+  el("backToManifestBtn").addEventListener("click",function(){ el("studio").classList.add("hidden"); el("result").classList.remove("hidden"); window.scrollTo(0,0); });
+  el("restart2Btn").addEventListener("click",function(){ state=newState(); cur=0; el("studio").classList.add("hidden"); el("workshop").classList.remove("hidden"); render(); window.scrollTo(0,0); });
+
+  Array.prototype.forEach.call(el("techSeg").children,function(b){ b.addEventListener("click",function(){ tech=b.getAttribute("data-tech"); setSeg("techSeg","data-tech",tech); eraser=false; setSeg("toolSeg","data-tool","brush"); }); });
+  Array.prototype.forEach.call(el("toolSeg").children,function(b){ b.addEventListener("click",function(){ eraser=(b.getAttribute("data-tool")==="eraser"); setSeg("toolSeg","data-tool",eraser?"eraser":"brush"); }); });
+  Array.prototype.forEach.call(el("shapeSeg").children,function(b){ b.addEventListener("click",function(){ shape=b.getAttribute("data-shape"); setSeg("shapeSeg","data-shape",shape); initCanvas(); }); });
+  el("customColor").addEventListener("input",function(){ color=el("customColor").value; eraser=false; setSeg("toolSeg","data-tool","brush"); syncSwatch(); });
+  el("brush").addEventListener("input",function(){ brush=parseInt(el("brush").value,10); });
+  el("undoBtn").addEventListener("click",undo);
+  el("clearBtn").addEventListener("click",initCanvas);
+  el("saveArtBtn").addEventListener("click",function(){
+    var name=(el("pTitle").textContent||"glezna").toLowerCase().replace(/[^a-z0-9āčēģīķļņšūž]+/gi,"-").replace(/^-+|-+$/g,"")||"glezna";
+    var a=document.createElement("a"); a.download=name+".png"; a.href=cv.toDataURL("image/png"); document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  });
+  window.addEventListener("resize",function(){ if(!el("studio").classList.contains("hidden")) fitDisplay(); });
+
+  render();
+})();
+</script>
+</body>
+</html>
