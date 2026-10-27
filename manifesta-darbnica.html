@@ -13,13 +13,40 @@
     --red:#CC2A1E;--red-dark:#A21F16;--line:#141210;--muted:#8A8371;
   }
   *{box-sizing:border-box}
-  html,body{margin:0}
-  body{
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17150F}
+  #app{
+    position:absolute;top:0;left:0;width:1600px;height:900px;transform-origin:0 0;overflow:hidden;
     font-family:"Work Sans",system-ui,sans-serif;color:var(--ink);
-    background:#17150F;min-height:100vh;padding:28px 16px;
-    display:flex;align-items:flex-start;justify-content:center;
+    background:#17150F;padding:64px 50px 10px;
+    display:flex;flex-direction:column;align-items:center;
   }
-  .stage{width:100%;max-width:760px}
+  .stage{width:1500px;flex:1;min-height:0;display:flex;flex-direction:column}
+  .stage .sheet{flex:1;min-height:0;display:flex;flex-direction:column}
+  #workshop,#result,#studio{flex:1;min-height:0;display:flex;flex-direction:column}
+  #workshop .inner{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto;padding:30px 60px 30px}
+  #workshop .nav{margin-top:auto;padding-top:20px}
+  #workshop .chips{max-width:1200px}
+  #workshop input.tin{max-width:900px}
+  #result .poster{flex:1;min-height:0;display:grid;grid-template-columns:560px 1fr}
+  #result .p-head{clip-path:polygon(0 0,100% 0,calc(100% - 26px) 100%,0 100%);display:flex;flex-direction:column;justify-content:center;padding:40px 60px 40px 44px}
+  #result .p-body{overflow:auto;padding:30px 44px 20px 40px;display:flex;flex-direction:column;justify-content:center}
+  #result .editnote{margin:8px 44px 0}
+  #result .result-actions{padding:12px 44px 16px}
+  #studio .masthead{padding:14px 30px 10px}
+  #studio .masthead h1{font-size:32px}
+  #studio .inner{flex:1;min-height:0;display:grid;grid-template-columns:330px 300px 1fr;grid-template-rows:1fr auto;gap:16px 22px;padding:18px 30px 18px}
+  #studio .guide{margin:0;overflow:auto;grid-row:1}
+  #studio .studio-grid{display:contents}
+  #studio .tools{grid-row:1;overflow:auto}
+  #studio .seg{flex-direction:row;flex-wrap:wrap}
+  #studio .canvas-wrap{grid-row:1;min-height:0;height:100%}
+  #studio .studio-actions{grid-column:1/-1;margin-top:0}
+  #studio .tgroup{margin-bottom:12px}
+  #studio .swatches{grid-template-columns:repeat(5,40px);gap:7px}
+  #result .p-title{word-break:normal;overflow-wrap:normal;white-space:nowrap}
+  #fsBtn{position:absolute;right:50px;top:14px;z-index:5;font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:14px;
+    color:var(--paper);background:var(--red);border:2px solid var(--red);border-radius:2px;padding:8px 16px;cursor:pointer}
+  #fsBtn:hover{background:var(--red-dark);border-color:var(--red-dark)}
   .sheet{
     background:
       repeating-linear-gradient(0deg, rgba(20,18,16,.028) 0 3px, rgba(0,0,0,0) 3px 6px),
@@ -29,7 +56,7 @@
   }
   .masthead{border-bottom:3px double var(--ink);padding:22px 30px 16px;position:relative}
   .kicker{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.28em;font-size:12px;color:var(--red);margin:0 0 4px}
-  .masthead h1{font-family:"Archivo Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(28px,7vw,48px);line-height:1.28;padding-top:6px;padding-bottom:2px;letter-spacing:.005em;margin:0;color:var(--ink)}
+  .masthead h1{font-family:"Archivo Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:44px;line-height:1.28;padding-top:6px;padding-bottom:2px;letter-spacing:.005em;margin:0;color:var(--ink)}
   .masthead .tag{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;color:var(--ink-soft);margin-top:8px}
 
   .inner{padding:26px 30px 30px}
@@ -40,7 +67,7 @@
   .steps .st.now{background:var(--red)}
 
   .stepnum{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:var(--red);margin:0 0 6px}
-  .q{font-family:"Archivo Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(22px,5vw,30px);line-height:1.3;padding-top:4px;margin:0 0 6px}
+  .q{font-family:"Archivo Black",sans-serif;font-weight:400;text-transform:uppercase;font-size:32px;line-height:1.3;padding-top:4px;margin:0 0 6px}
   .hint{font-size:15px;color:var(--ink-soft);line-height:1.5;margin:0 0 18px;max-width:56ch}
 
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px}
@@ -52,7 +79,7 @@
   label.fl{display:block;font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--ink-soft);margin:14px 0 6px}
   input.tin,textarea.tin{width:100%;font-family:"Work Sans",sans-serif;font-size:16px;color:var(--ink);background:rgba(255,255,255,.5);border:1.6px solid var(--ink);border-radius:2px;padding:12px 14px;resize:vertical}
   input.tin::placeholder,textarea.tin::placeholder{color:var(--muted)}
-  input.big{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:clamp(20px,4.4vw,26px);letter-spacing:.01em;padding:14px}
+  input.big{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:26px;letter-spacing:.01em;padding:14px}
 
   .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
   .btn{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:14px;color:var(--paper);background:var(--ink);border:2px solid var(--ink);border-radius:2px;padding:12px 22px;cursor:pointer;transition:transform .1s,background .12s}
@@ -68,16 +95,16 @@
   .p-head{background:var(--red);padding:34px 30px 34px;clip-path:polygon(0 0,100% 0,100% calc(100% - 16px),0 100%)}
   .p-body{padding:26px 30px 30px}
   .p-kicker{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.3em;font-size:12px;color:var(--paper);margin:0 0 14px}
-  .p-title{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--paper);font-size:clamp(34px,9vw,64px);line-height:1.26;padding-top:8px;margin:0 0 10px;word-break:break-word}
+  .p-title{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--paper);font-size:64px;line-height:1.26;padding-top:8px;margin:0 0 10px;word-break:break-word}
   .p-sub{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:13px;color:var(--paper);opacity:.92;margin:0}
 
-  .p-preamble{font-family:"Oswald",sans-serif;font-weight:500;font-size:clamp(17px,3.4vw,20px);line-height:1.35;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);border-left:5px solid var(--red);padding-left:14px;margin:0 0 22px}
+  .p-preamble{font-family:"Oswald",sans-serif;font-weight:500;font-size:20px;line-height:1.35;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);border-left:5px solid var(--red);padding-left:14px;margin:0 0 22px}
   ol.decl{list-style:none;counter-reset:d;margin:0 0 22px;padding:0}
   ol.decl li{counter-increment:d;position:relative;padding-left:52px;margin-bottom:16px;font-size:17.5px;line-height:1.5}
   ol.decl li::before{content:counter(d,decimal);position:absolute;left:0;top:-2px;font-family:"Archivo Black",sans-serif;font-size:30px;color:var(--red);line-height:1}
   .blank{border-bottom:2px dashed var(--red);color:var(--ink);cursor:text;padding:0 3px;min-width:40px;display:inline-block}
   .blank:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
-  .p-slogan{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--red);font-size:clamp(24px,6.2vw,40px);line-height:1.3;margin:20px 0 6px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:20px 0 16px;word-break:break-word}
+  .p-slogan{font-family:"Archivo Black",sans-serif;text-transform:uppercase;color:var(--red);font-size:38px;line-height:1.3;margin:20px 0 6px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:20px 0 16px;word-break:break-word}
   .p-sign{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:13px;color:var(--ink-soft);margin-top:14px}
 
   .editnote{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted);margin:2px 30px 0}
@@ -85,18 +112,16 @@
 
   /* Gleznošanas darbnīca */
   .guide{border:2px solid var(--ink);background:rgba(255,255,255,.45);padding:14px 16px;margin-bottom:20px}
-  .guide .g-title{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:clamp(18px,4vw,24px);line-height:1.28;padding-top:3px;color:var(--ink)}
+  .guide .g-title{font-family:"Archivo Black",sans-serif;text-transform:uppercase;font-size:22px;line-height:1.28;padding-top:3px;color:var(--ink)}
   .guide .g-title span{color:var(--red)}
   .guide .g-slogan{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--red);font-size:14px;margin-top:4px}
   .guide .g-decl{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:1.45}
   .guide .g-decl li{margin-bottom:2px}
 
   .studio-grid{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:start}
-  @media(max-width:620px){.studio-grid{grid-template-columns:1fr}}
   .tgroup{margin-bottom:16px}
   .tlabel{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--ink-soft);margin:0 0 7px}
   .seg{display:flex;flex-direction:column;gap:6px}
-  @media(max-width:620px){.seg{flex-direction:row;flex-wrap:wrap}}
   .segbtn{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:13px;color:var(--ink);background:transparent;border:1.6px solid var(--ink);border-radius:2px;padding:9px 12px;cursor:pointer;transition:background .12s,color .12s}
   .segbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
   .swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px}
@@ -120,6 +145,9 @@
   :focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
   @media print{
+    html,body{overflow:visible;height:auto}
+    #app{position:static;transform:none !important;width:auto;height:auto;padding:0;background:#fff;display:block}
+    #fsBtn{display:none}
     body{background:#fff;padding:0}
     .stage{max-width:100%}
     .no-print{display:none !important}
@@ -129,6 +157,8 @@
 </style>
 </head>
 <body>
+<div id="app">
+  <button id="fsBtn" class="no-print" type="button">⛶ Atvērt pilnekrānu</button>
   <div class="stage">
     <div class="sheet">
       <!-- DARBNĪCA -->
@@ -234,6 +264,7 @@
     </div>
     <p class="footer">Manifesta darbnīca · VisaSkola.lv</p>
   </div>
+</div>
 
 <script>
 (function(){
@@ -335,7 +366,8 @@
     el("pPre").setAttribute("contenteditable","true");
     el("pSlogan").setAttribute("contenteditable","true");
   }
-  function showResult(){ save(); buildManifesto(); el("workshop").classList.add("hidden"); el("studio").classList.add("hidden"); el("result").classList.remove("hidden"); window.scrollTo(0,0); }
+  function fitTitle(){ var t=el("pTitle"); var sz=64; t.style.fontSize=sz+"px"; while(t.scrollWidth>t.clientWidth && sz>26){ sz-=2; t.style.fontSize=sz+"px"; } }
+  function showResult(){ save(); buildManifesto(); el("workshop").classList.add("hidden"); el("studio").classList.add("hidden"); el("result").classList.remove("hidden"); fitTitle(); window.scrollTo(0,0); }
 
   nextBtn.addEventListener("click",function(){ save(); if(cur<STEPS.length-1){cur++;render();window.scrollTo(0,0);} else showResult(); });
   backBtn.addEventListener("click",function(){ save(); if(cur>0){cur--;render();window.scrollTo(0,0);} });
@@ -352,8 +384,8 @@
   function hexToRgb(hex){hex=hex.replace("#","");if(hex.length===3)hex=hex.split("").map(function(c){return c+c;}).join("");var n=parseInt(hex,16);return [(n>>16)&255,(n>>8)&255,n&255];}
 
   function fitDisplay(){
-    var wrap=el("canvasWrap"); var cw=wrap.clientWidth-28; if(cw<180)cw=180;
-    var maxH=460; var sc=Math.min(cw/cv.width, maxH/cv.height);
+    var wrap=el("canvasWrap"); var cw=wrap.clientWidth-40; if(cw<180)cw=180;
+    var maxH=Math.max(200, wrap.clientHeight-40); var sc=Math.min(cw/cv.width, maxH/cv.height);
     cv.style.width=(cv.width*sc)+"px"; cv.style.height=(cv.height*sc)+"px";
   }
   function initCanvas(){
@@ -460,6 +492,38 @@
   window.addEventListener("resize",function(){ if(!el("studio").classList.contains("hidden")) fitDisplay(); });
 
   render();
+})();
+</script>
+
+<script>
+/* ── 16:9 mērogošana un pilnekrāns ── */
+(function(){
+  const app = document.getElementById('app');
+  window.APP_SCALE = 1;
+  function fitApp(){
+    const W = window.innerWidth, H = window.innerHeight;
+    const sc = Math.min(W/1600, H/900); window.APP_SCALE = sc;
+    app.style.transform = 'scale(' + sc + ')';
+    app.style.left = Math.max(0,(W-1600*sc)/2) + 'px';
+    app.style.top  = Math.max(0,(H-900*sc)/2) + 'px';
+  }
+  window.addEventListener('resize', fitApp); fitApp();
+  const btn = document.getElementById('fsBtn');
+  function isFs(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function fallback(){ if(confirm('Pilnekrāna režīms šajā logā nav pieejams. Atvērt rīku jaunā cilnē?')) window.open(location.href,'_blank'); }
+  function toggle(){
+    const el = document.documentElement;
+    try{
+      if(isFs()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else if(el.requestFullscreen) el.requestFullscreen().catch(fallback);
+      else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else fallback();
+    }catch(e){ fallback(); }
+  }
+  function upd(){ btn.textContent = isFs() ? '✕ Iziet no pilnekrāna' : '⛶ Atvērt pilnekrānu'; setTimeout(fitApp, 60); }
+  btn.addEventListener('click', toggle);
+  document.addEventListener('fullscreenchange', upd);
+  document.addEventListener('webkitfullscreenchange', upd);
 })();
 </script>
 </body>
